@@ -23,7 +23,7 @@ public class Reproductor {
                 FileInputStream fis = new FileInputStream(cancion.getRutaArchivo());
                 player = new Player(fis);
                 reproduciendo = true;
-                System.out.Println("Reproduciendo: " +cancion.getTitulo());
+                System.out.println("Reproduciendo: " + cancion.getTitulo());
                 player.play();
                 reproduciendo = false;
             } catch (FileNotFoundException e){
@@ -33,8 +33,8 @@ public class Reproductor {
                 System.out.println("❌ Error al reproducir: " + e.getMessage());
                 e.printStackTrace();
             }
-        })
-
+        });
+        
         hiloReproduccion.start();
     }
     public void pausar(){

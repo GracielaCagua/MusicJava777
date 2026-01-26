@@ -6,6 +6,7 @@ import java.awt.event.*;
 import java.io.File;
 import java.util.ArrayList;
 import modelo.Cancion;
+import controlador.Reproductor;
 
 public class VentanaReproductor extends JFrame {
     
