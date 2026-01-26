@@ -4,6 +4,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
+import java.util.ArrayList;
+import modelo.Cancion;
 
 public class VentanaReproductor extends JFrame {
     
@@ -14,7 +16,7 @@ public class VentanaReproductor extends JFrame {
     private JSlider sliderVolumen;
     private JLabel lblCancionActual, lblEstado;
     
-    private File[] archivosMusicales;
+    private ArrayList<Cancion> cancionesLista;
     private int indiceActual = 0;
     private boolean estaReproduciendo = false;
     
@@ -200,21 +202,31 @@ public class VentanaReproductor extends JFrame {
         
         if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
             File carpeta = chooser.getSelectedFile();
-            archivosMusicales = carpeta.listFiles((dir, name) -> 
+            File[] archivosMusicales = carpeta.listFiles((dir, name) -> 
                 name.toLowerCase().endsWith(".mp3")
             );
             
             if (archivosMusicales != null && archivosMusicales.length > 0) {
+                cancionesLista = new ArrayList<>();
                 modeloLista.clear();
+                
                 for (int i = 0; i < archivosMusicales.length; i++) {
-                    modeloLista.addElement((i + 1) + ".  " + archivosMusicales[i].getName());
+                    String nombreArchivo = archivosMusicales[i].getName();
+                    String titulo = nombreArchivo.replace(".mp3", "");
+                    String ruta = archivosMusicales[i].getAbsolutePath();
+                    String artista = "Desconocido";
+                    
+                    Cancion cancion = new Cancion(titulo, artista, ruta);
+                    cancionesLista.add(cancion);
+                    
+                    modeloLista.addElement((i + 1) + ".  " + titulo);
                 }
                 
                 btnPlayPausa.setEnabled(true);
                 btnSiguiente.setEnabled(true);
                 btnAnterior.setEnabled(true);
                 
-                lblEstado.setText(archivosMusicales.length + " canciones cargadas");
+                lblEstado.setText(cancionesLista.size() + " canciones cargadas");
                 lblCancionActual.setText("Lista cargada");
             } else {
                 JOptionPane.showMessageDialog(this, 
@@ -226,22 +238,23 @@ public class VentanaReproductor extends JFrame {
     }
     
     private void reproducir() {
-        if (archivosMusicales == null || archivosMusicales.length == 0) return;
+        if (cancionesLista == null || cancionesLista.isEmpty()) return;
         
         estaReproduciendo = true;
         btnPlayPausa.setText("PAUSA");
         btnPlayPausa.setBackground(ROSA_MORADO);
         
-        String nombreCancion = archivosMusicales[indiceActual].getName();
-        lblCancionActual.setText(nombreCancion);
+        Cancion cancionActual = cancionesLista.get(indiceActual);
+        lblCancionActual.setText(cancionActual.getTitulo() + " - " + cancionActual.getArtista());
         lblEstado.setText("Reproduciendo...");
         listaCanciones.setSelectedIndex(indiceActual);
         
         btnStop.setEnabled(true);
         
         // COMPAÑERO B agregará aquí el código de JLayer para reproducir audio
-        System.out.println("Reproduciendo: " + nombreCancion);
-        System.out.println("Ruta: " + archivosMusicales[indiceActual].getAbsolutePath());
+        System.out.println("Reproduciendo: " + cancionActual.getTitulo());
+        System.out.println("Artista: " + cancionActual.getArtista());
+        System.out.println("Ruta: " + cancionActual.getRutaArchivo());
     }
     
     private void pausar() {
@@ -267,7 +280,7 @@ public class VentanaReproductor extends JFrame {
     }
     
     private void siguiente() {
-        if (archivosMusicales != null && indiceActual < archivosMusicales.length - 1) {
+        if (cancionesLista != null && indiceActual < cancionesLista.size() - 1) {
             indiceActual++;
             if (estaReproduciendo) {
                 reproducir();
@@ -278,7 +291,7 @@ public class VentanaReproductor extends JFrame {
     }
     
     private void anterior() {
-        if (archivosMusicales != null && indiceActual > 0) {
+        if (cancionesLista != null && indiceActual > 0) {
             indiceActual--;
             if (estaReproduciendo) {
                 reproducir();
@@ -323,11 +336,15 @@ public class VentanaReproductor extends JFrame {
     }
     
     // Métodos públicos para el controlador
-    public File getArchivoActual() {
-        if (archivosMusicales != null && indiceActual < archivosMusicales.length) {
-            return archivosMusicales[indiceActual];
+    public Cancion getCancionActual() {
+        if (cancionesLista != null && indiceActual < cancionesLista.size()) {
+            return cancionesLista.get(indiceActual);
         }
         return null;
+    }
+    
+    public ArrayList<Cancion> getCancionesLista() {
+        return cancionesLista;
     }
     
     public void setProgreso(int porcentaje) {
