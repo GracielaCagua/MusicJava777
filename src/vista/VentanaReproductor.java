@@ -236,7 +236,9 @@ public class VentanaReproductor extends JFrame {
             }
         }
     }
-    
+
+    private Reproductor reproductor = new Reproductor();
+
     private void reproducir() {
         if (cancionesLista == null || cancionesLista.isEmpty()) return;
         
@@ -250,11 +252,8 @@ public class VentanaReproductor extends JFrame {
         listaCanciones.setSelectedIndex(indiceActual);
         
         btnStop.setEnabled(true);
-        
-        // COMPAÑERO B agregará aquí el código de JLayer para reproducir audio
-        System.out.println("Reproduciendo: " + cancionActual.getTitulo());
-        System.out.println("Artista: " + cancionActual.getArtista());
-        System.out.println("Ruta: " + cancionActual.getRutaArchivo());
+
+        reproductor.reproducir(cancionActual);
     }
     
     private void pausar() {
@@ -263,7 +262,7 @@ public class VentanaReproductor extends JFrame {
         btnPlayPausa.setBackground(MORADO_MEDIO);
         lblEstado.setText("Pausado");
         
-        System.out.println("Pausado");
+        reproductor.pausar();
     }
     
     private void detener() {
@@ -276,7 +275,7 @@ public class VentanaReproductor extends JFrame {
         barraProgreso.setString("0%");
         btnStop.setEnabled(false);
         
-        System.out.println("Detenido");
+        reproductor.detener();
     }
     
     private void siguiente() {
