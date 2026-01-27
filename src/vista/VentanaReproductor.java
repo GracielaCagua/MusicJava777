@@ -273,8 +273,15 @@ public class VentanaReproductor extends JFrame {
     }
     
     private void siguiente() {
-        if (cancionesLista != null && indiceActual < cancionesLista.size() - 1) {
+        if (cancionesLista != null && indiceActual < cancionesLista.size() - 1) { //si hay canciones en la lista y no es la ultima
             indiceActual++;
+            if (estaReproduciendo) {
+                reproducir();
+            } else {
+                listaCanciones.setSelectedIndex(indiceActual); //actualizar selección en la lista
+            }
+        } else { //si es la última, empezar desde el principio
+            indiceActual = 0;
             if (estaReproduciendo) {
                 reproducir();
             } else {
