@@ -14,7 +14,6 @@ public class VentanaReproductor extends JFrame {
     private JList<String> listaCanciones;
     private DefaultListModel<String> modeloLista;
     private JProgressBar barraProgreso;
-    private JSlider sliderVolumen;
     private JLabel lblCancionActual, lblEstado;
     
     private ArrayList<Cancion> cancionesLista;
@@ -77,11 +76,6 @@ public class VentanaReproductor extends JFrame {
         barraProgreso.setBorderPainted(false);
         barraProgreso.setString("0%");
         
-        // Slider de volumen
-        sliderVolumen = new JSlider(0, 100, 70);
-        sliderVolumen.setBackground(NEGRO);
-        sliderVolumen.setForeground(MORADO_CLARO);
-        sliderVolumen.setPreferredSize(new Dimension(200, 30));
         
         // Etiquetas con estilo
         lblCancionActual = new JLabel("Sin canción", SwingConstants.CENTER);
@@ -154,12 +148,9 @@ public class VentanaReproductor extends JFrame {
         JLabel lblVol = new JLabel("VOLUMEN");
         lblVol.setForeground(MORADO_CLARO);
         lblVol.setFont(new Font("Segoe UI", Font.BOLD, 10));
-        panelVolumen.add(lblVol);
-        panelVolumen.add(sliderVolumen);
         
         panelInferior.add(panelProgreso, BorderLayout.NORTH);
         panelInferior.add(panelControles, BorderLayout.CENTER);
-        panelInferior.add(panelVolumen, BorderLayout.SOUTH);
         
         add(panelSuperior, BorderLayout.NORTH);
         add(panelCentral, BorderLayout.CENTER);
@@ -350,10 +341,6 @@ public class VentanaReproductor extends JFrame {
     public void setProgreso(int porcentaje) {
         barraProgreso.setValue(porcentaje);
         barraProgreso.setString(porcentaje + "%");
-    }
-    
-    public int getVolumen() {
-        return sliderVolumen.getValue();
     }
     
     public boolean isReproduciendo() {
