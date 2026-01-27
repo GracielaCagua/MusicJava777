@@ -1,16 +1,16 @@
 package vista;
 
-import javax.swing.*;
+import controlador.Reproductor;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
 import java.util.ArrayList;
+import javax.swing.*;
 import modelo.Cancion;
-import controlador.Reproductor;
 
 public class VentanaReproductor extends JFrame {
     
-    private JButton btnPlayPausa, btnStop, btnSiguiente, btnAnterior, btnCargarCarpeta;
+    private JButton btnPlayPausa, btnSiguiente, btnAnterior, btnCargarCarpeta;
     private JList<String> listaCanciones;
     private DefaultListModel<String> modeloLista;
     private JProgressBar barraProgreso;
@@ -49,13 +49,11 @@ public class VentanaReproductor extends JFrame {
     private void crearComponentes() {
         // Botones con tonos morados
         btnPlayPausa = crearBoton("PLAY", MORADO_MEDIO);
-        btnStop = crearBoton("STOP", ROSA_MORADO);
         btnSiguiente = crearBoton(">>", MORADO_CLARO);
         btnAnterior = crearBoton("<<", MORADO_CLARO);
         btnCargarCarpeta = crearBoton("CARGAR", MORADO_OSCURO);
         
         btnPlayPausa.setEnabled(false);
-        btnStop.setEnabled(false);
         btnSiguiente.setEnabled(false);
         btnAnterior.setEnabled(false);
         
@@ -148,7 +146,6 @@ public class VentanaReproductor extends JFrame {
         panelControles.add(btnCargarCarpeta);
         panelControles.add(btnAnterior);
         panelControles.add(btnPlayPausa);
-        panelControles.add(btnStop);
         panelControles.add(btnSiguiente);
         
         // Control de volumen
@@ -180,7 +177,6 @@ public class VentanaReproductor extends JFrame {
             }
         });
         
-        btnStop.addActionListener(e -> detener());
         btnSiguiente.addActionListener(e -> siguiente());
         btnAnterior.addActionListener(e -> anterior());
         
@@ -251,8 +247,6 @@ public class VentanaReproductor extends JFrame {
         lblCancionActual.setText(cancionActual.getTitulo() + " - " + cancionActual.getArtista());
         lblEstado.setText("Reproduciendo...");
         listaCanciones.setSelectedIndex(indiceActual);
-        
-        btnStop.setEnabled(true);
 
         reproductor.reproducir(cancionActual);
     }
@@ -274,7 +268,6 @@ public class VentanaReproductor extends JFrame {
         lblEstado.setText("Detenido");
         barraProgreso.setValue(0);
         barraProgreso.setString("0%");
-        btnStop.setEnabled(false);
         
         reproductor.detener();
     }
@@ -311,7 +304,7 @@ public class VentanaReproductor extends JFrame {
         // Tamaño según el texto
         if (texto.equals("CARGAR")) {
             btn.setPreferredSize(new Dimension(110, 45));
-        } else if (texto.equals("PLAY") || texto.equals("PAUSA") || texto.equals("STOP")) {
+        } else if (texto.equals("PLAY") || texto.equals("PAUSA")) {
             btn.setPreferredSize(new Dimension(95, 45));
         } else {
             btn.setPreferredSize(new Dimension(60, 45));
